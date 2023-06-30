@@ -23,7 +23,6 @@ import SkeletonLoading from '../components/SkeletonLoading';
 // import Select from '../components/Select';
 import WikiCountries from '../data/WikiCountries';
 import WikiNums from '../data/WikiNums';
-// import { SingleDatepicker } from '/components';
 import { Select, CreatableSelect, AsyncSelect, GroupBase } from 'chakra-react-select';
 //   import { groupedOptions, colorOptions, groupedCountries } from "./data/data";
 
@@ -148,15 +147,7 @@ function ProfileView() {
                                 <Box>
                                     <FormControl p={4}>
                                         <FormLabel fontSize='xs'>DATE</FormLabel>
-                                        {/* <SingleDatepicker name='date-input' date={date} onDateChange={setDate} />
 
-                                        <Flex alignItems={'center'}>
-                                            <Box marginRight={'1rem'}>closeOnSelect:</Box>
-                                            <Switch
-                                                isChecked={isSingleChecked}
-                                                onChange={(e) => setSingleCheck(e.currentTarget.checked)}
-                                            />
-                                        </Flex> */}
                                         <Select
                                             tagVariant='outline'
                                             label='Date'
