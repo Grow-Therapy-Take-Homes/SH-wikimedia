@@ -22,62 +22,101 @@ import ViewCard from '../components/ViewCard';
 import SkeletonLoading from '../components/SkeletonLoading';
 // import Select from '../components/Select';
 import WikiCountries from '../data/WikiCountries';
+import Moment from 'react-moment';
+import defaultMoment from 'moment';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import WikiNums from '../data/WikiNums';
 import { Select, CreatableSelect, AsyncSelect, GroupBase } from 'chakra-react-select';
 //   import { groupedOptions, colorOptions, groupedCountries } from "./data/data";
 
 function ProfileView() {
-    const [ isLoading, setLoading ] = useState(true);
     // Get information about this day in history from English Wikipedia
-
-    // country
-    // set value for default selection
+    const [ isLoading, setLoading ] = useState(true);
     const [ selectedValueCountry, setSelectedValueCountry ] = useState();
     const [ selectedLabelCountry, setSelectedLabelCountry ] = useState();
-    const [ date, setDate ] = useState(new Date());
+    const [ selectedValueNum, setSelectedValueNum ] = useState();
+    const [ wikiData, setWikiData ] = useState(null);
 
-    // handle onChange event of the dropdown
+    const [ selectedDate, setSelectedDate ] = useState(new Date(Date.now() - 8.64e7)); // yesterday new Date(Date.now() - 8.64e7)
+    const [ calDate, setCalDate ] = useState();
+    console.log('selectedDate:', selectedDate); // selectedDate: Thu Jun 29 2023 15:17:58 GMT-0700 (Pacific Daylight Time)
+    console.log('calDate:', calDate);
+
+    //when day is clicked
+    const handleDateSelect = (e) => {
+        setCalDate(e);
+        console.log('calDate select 1:', calDate);
+        console.log('selectedDate select 1:', selectedDate);
+        // setSelectedDate(e.value);
+        console.log('e.value date 1: ', e.value);
+    };
+
+    //only when value has changed
+    const handleDateChange = (e) => {
+        setSelectedDate(e);
+        console.log('calDate date 2:', calDate);
+        console.log('selectedDate date 2:', selectedDate);
+        // setCalDate(e.value);
+        console.log('e.value date 2: ', e);
+    };
+
+    const handleChangeNum = (e) => {
+        setSelectedValueNum(e.value);
+    };
+
     const handleChangeCountry = (e) => {
         setSelectedValueCountry(e.value);
         setSelectedLabelCountry(e.value);
     };
 
-    // set value for default selection
-    const [ selectedValueNum, setSelectedValueNum ] = useState();
-
-    // handle onChange event of the dropdown
-    const handleChangeNum = (e) => {
-        setSelectedValueNum(e.value);
-    };
-
-    let today = new Date();
-    let month = String(today.getMonth() + 1).padStart(2, '0');
-    let day = String(today.getDate()).padStart(2, '0');
-    let url = `https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/all/${month}/${day}`;
-    let countrycode = selectedLabelCountry;
-
+    // let url = `https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/all/${month}/${day}`;
+    const countrycode = selectedLabelCountry;
+    // fun stuff later
+    // let calYear;
+    // let calMonth;
+    // let calDay;
+    const dateUrl = defaultMoment(selectedDate).format('YYY/MM/DD');
+    const yesterdayDate = defaultMoment().subtract(1, 'days').format('YYYY/MM/DD');
     setTimeout(() => {
         setLoading(false);
     }, 1500);
 
-    const [ wikiData, setWikiData ] = useState(null);
-
-    const findMostViewed = (countrycode) => {
+    const findMostViewed = (countrycode, dateUrl) => {
         fetch(
             `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${countrycode
                 ? countrycode
-                : 'en'}.wikipedia/all-access/2015/10/10`
+                : 'en'}.wikipedia/all-access/${dateUrl ? dateUrl : yesterdayDate}`
         )
-            // fetch(`https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/2015/10/10`)
             .then((res) => res.json())
             .then((data) => (data.items ? setWikiData(data.items) : setWikiData(data)));
     };
 
+    // `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${countrycode
+    //     ? countrycode
+    //     : 'en'}.wikipedia/all-access/${year ? year : '2015'}/${month ? month : '10'}/${date ? date : '10'}`
+
+    // `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${countrycode}/${year}/${month}/${day}
+    //     ? countrycode
+    //     : 'en'}.wikipedia/all-access/${year}/${month}/${day}`
+
+    // `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/2015/10/10`
+    // );
+    // fetch(
+    // `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${countrycode ? countrycode : 'en'}/featured/${year
+    //     ? String(defaultMoment().year)
+    //     : '2023'}/${month ? String(defaultMoment().month) : '06'}/${date ? date : '29'}`
+
     // console.log('wikiData: ', wikiData);
     const handleSubmit = () => {
+        // findMostViewed(countrycode, '2015', '10', '10');
         findMostViewed(countrycode);
     };
     useEffect(() => {
+        // findMostViewed('', );
+        // findMostViewed('', defaultMoment().year, defaultMoment().month, defaultMoment().day());
+        // findMostViewed('', '', '', '');
         findMostViewed('');
     }, []);
     function DataTabs({ dataTabs }) {
@@ -103,6 +142,27 @@ function ProfileView() {
             </Center>
         );
     }
+    const getCalendarDate = (date) => {
+        // return date ? selected date : defaultMoment().subtract(1, 'days')
+        return defaultMoment().subtract(1, 'days');
+        // return defaultMoment(). datePickerSelectedAndFormattedHere
+    };
+
+    // const handleStartDate = (date) => {
+    //     this.setState({
+    //         startDate: '2022-08-20'
+    //     });
+    //     // this.setState({
+    //     //     startDate: defaultMoment().subtract(1, 'days')
+    //     // });
+    // };
+    // const handleChangeDate = (date) => {
+    //     // this.setState({
+    //     //     startDate: '2022-08-20'
+    //     //     // startDate: defaultMoment().subtract(1, 'days').format('YYYY/MM/DD')
+    //     //     // startDate: defaultMoment().subtract(1, 'days')
+    //     // });
+    // };
     function DataPanels({ data }) {
         return (
             <Tabs>
@@ -147,14 +207,15 @@ function ProfileView() {
                                 <Box>
                                     <FormControl p={4}>
                                         <FormLabel fontSize='xs'>DATE</FormLabel>
-
-                                        <Select
-                                            tagVariant='outline'
-                                            label='Date'
-                                            variant='outline'
-                                            options={WikiNums}
-                                            value={WikiNums}
+                                        <DatePicker
+                                            defaultValue={'06/12/2023'}
+                                            value={selectedDate}
+                                            onSelect={handleDateSelect} //when day is clicked
+                                            onChange={handleDateChange} //only when value has changed
+                                            selected={selectedDate}
                                         />
+                                        {/* <DatePicker selected={date} onChange={handleChangeDate} /> */}
+                                        {/* <DatePicker selected={handleStartDate} onChange={handleChangeDate} /> */}
                                     </FormControl>
                                 </Box>
                                 <Box height='100px'>
