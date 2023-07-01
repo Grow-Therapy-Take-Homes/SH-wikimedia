@@ -29,6 +29,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import WikiNums from '../data/WikiNums';
 import { Select, CreatableSelect, AsyncSelect, GroupBase } from 'chakra-react-select';
+
+import IconDate from '../public/icon-date';
+import IconNum from '../public/icon-num';
+import IconCountry from '../public/icon-country';
+import Title from '../public/title';
 //   import { groupedOptions, colorOptions, groupedCountries } from "./data/data";
 
 function ProfileView() {
@@ -198,7 +203,7 @@ function ProfileView() {
             <Box pb='300px'>
                 <SlideFade in={!isLoading} offsetY='-20px'>
                     <Center fontSize='4xl' py='5'>
-                        Top Wikipedia articles
+                        <Title />
                     </Center>
 
                     <Box background='white' style={cardStyle}>
@@ -206,6 +211,9 @@ function ProfileView() {
                             <SimpleGrid columns={[ 1, 1, 4 ]} spacing='2px'>
                                 <Box>
                                     <FormControl p={4}>
+                                        {/* <Box p='4' float='left'> */}
+                                        {/* <IconDate /> */}
+                                        {/* </Box> */}
                                         <FormLabel fontSize='xs'>DATE</FormLabel>
                                         <DatePicker
                                             defaultValue={'06/12/2023'}
@@ -219,6 +227,9 @@ function ProfileView() {
                                     </FormControl>
                                 </Box>
                                 <Box height='100px'>
+                                    {/* <Box p='4' float='left'> */}
+                                    {/* <IconNum /> */}
+                                    {/* </Box> */}
                                     <FormControl p={4}>
                                         <FormLabel fontSize='xs'>NUM RESULTS</FormLabel>
                                         <Select
@@ -242,6 +253,9 @@ function ProfileView() {
                                 </Box>
                                 <Box height='100px'>
                                     <FormControl p={4}>
+                                        {/* <Box p='4' float='left'> */}
+                                        {/* <IconCountry /> */}
+                                        {/* </Box> */}
                                         <FormLabel fontSize='xs'>COUNTRY</FormLabel>
                                         <FormLabel />
                                         <Select
